@@ -1,0 +1,66 @@
+﻿@model Category
+
+<form method="post">
+    <div class="border p-3 mt-4">
+
+        <div class="row pb-2">
+            <h2 class="text-primary">Create Category</h2>
+            <hr />
+        </div>
+
+        <div asp-validation-summary="All"></div>
+        <!-- to summerize all the errors
+        we have three types 1. All
+                            2. Model Only (it will display only related to model and not element)
+                            - in modelstate we provide error for specific element but when we
+                              dont mention element then it becomes error for model
+                              eg.
+                              In CategoryController.cs file
+                              ModelState.AddModelError("", "Invalid Name");
+                              - here we havent define which element the error is for so basically
+                                for model
+                              3. None (nothing will be display)
+        -->
+        <div class="mb-3 row p-0">
+            <label asp-for="Name" class="p-0"></label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="mb-3 row p-1">
+            <label asp-for="DisplayOrder" class="p-0">Display Order</label>
+            <input asp-for="DisplayOrder" class="form-control" />
+            <span asp-validation-for="DisplayOrder" class="text-danger"></span>
+        </div>
+
+        <!-- above we have mentioned that asp-for tag which telling this label and button is for
+             elements of the model 'Category' and this is automatically posting this form data
+             we dont need to mention type since we have already mention type in model
+             and we dont need to mention name of the label since it will automatically get 
+             element name as a label
+             in second div we have mentioned the label text which will be display otherwise it will
+             retreave the element name
+        --> 
+
+        <div class="row">
+
+            <div class="col-6 col-md-3">
+                <button class="btn btn-primary form-control" type="submit">Create</button>
+            </div>
+
+            <div class="col-6 col-md-3">
+                <a class="btn btn-secondary form-control border" asp-controller="Category" asp-action="Index">Back to List</a>
+            </div>
+
+        </div>
+
+    </div>
+</form>
+
+             @section Scripts{
+                @{
+                    <partial name="_ValidationScriptsPartial" />
+                }
+             }
+             <!-- For client side validation if server side didnt work we already have javascript
+                  validation in above file which has jquerty validation links which will validate 
+             -->

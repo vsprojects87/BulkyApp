@@ -17,6 +17,14 @@ namespace BulkyApp.Data
         // In Console Type -> update-database
         // It will create database
 
-        
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Category>().HasData(
+                new Category { Id=1,Name="Action",DisplayOrder=1},
+                new Category { Id = 2, Name = "Drama", DisplayOrder = 2 },
+                new Category { Id = 3, Name = "Sci-Fi", DisplayOrder = 3 }
+                );
+        }
+
     }
 }
