@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/BulkyApp.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
 </head>
 <body>
     <header>
@@ -35,6 +36,16 @@
     </header>
     <div class="container">
         <main role="main" class="pb-3">
+            <partial name="_Notifications" />
+            <!-- this is coming from partial view that we created in shared folder of view folder , "_Notification is empty view file
+                that we using as a partial view, we knew that view is partial by writing it in partial name tag
+
+                rather than writing the code again and again we can mention the reusable components by writing it in partial view which
+                is in the shared folder so it is accessible to all the classes and it help us add view in another view just like we did here
+                
+                now we have mention partial view in _layout we can access it for every view without having to mention it in every view
+                
+            " -->
             @RenderBody()
         </main>
     </div>
