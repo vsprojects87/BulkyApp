@@ -15,6 +15,6 @@ namespace BulkyApp.Models
         [Range(1,100,ErrorMessage ="Display Order must be between 1 and 100")]
         public int DisplayOrder { get; set; }
     }
-    // above in display order we can tell how the database coloumn heading should be display
+    // above in display order we can tell how the database column heading should be display
     // and in which name it should be display when we will use it in asp-for tag
 }

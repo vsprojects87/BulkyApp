@@ -1,10 +1,10 @@
-﻿@if (TempData["success"] != null)
+﻿@if (TempData["Success"] != null)
 {
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     // we have added above file 
     <script type="text/javascript">
-        toastr.success('@TempData["success"]');
+        toastr.success('@TempData["Success"]');
     </script>
 }
 @if (TempData["error"] != null)
@@ -12,7 +12,18 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <script type="text/javascript">
-        toastr.error('@TempData["success"]');
+        toastr.error('@TempData["error"]');
     </script>
 }
 
+<!--
+we got above links through -> https://codeseven.github.io/toastr/
+we can create beautiful toast using js and above site provide us that fucntionality
+
+we have copied the minified js from above site into this page inside  script tag and we have also added minified jquery before that
+since it is required for above links
+
+we have added minified css in _layout file since it will be accessible
+
+
+-->
