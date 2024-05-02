@@ -3,23 +3,24 @@ using BulkyApp.DataAccess.Data;
 using Microsoft.AspNetCore.Mvc;
 using BulkyApp.DataAccess.Repository.IRepository;
 using Bulky.DataAccess.Repository.IRepository;
+using Bulky.Models;
 
 namespace BulkyWeb.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    public class CategoryController : Controller
+    public class ProductController : Controller
     {
         // 1
         private readonly IUnitOfWork _unitOfWork;
-        public CategoryController(IUnitOfWork unitOfWork)
+        public ProductController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
         public IActionResult Index()
         {
             // 2
-            List<Category> objCategoryList = _unitOfWork.Category.GetAll().ToList();
-            return View(objCategoryList);
+            List<Product> objProductList = _unitOfWork.Product.GetAll().ToList();
+            return View(objProductList);
         }
 
         public IActionResult Create()
@@ -27,19 +28,14 @@ namespace BulkyWeb.Areas.Admin.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult Create(Category obj)
+        public IActionResult Create(Product obj)
         {
-            if (obj.Name == obj.DisplayOrder.ToString())
-            {
-                ModelState.AddModelError("Name", "The Display Order Cannot be same as Name");
-                // when we use this method we can throw custom error messages
-            }
             //3
             if (ModelState.IsValid)
             {
-                _unitOfWork.Category.Add(obj);
+                _unitOfWork.Product.Add(obj);
                 _unitOfWork.Save();
-                TempData["Success"] = "Category Created Successfully";
+                TempData["Success"] = "Product Created Successfully";
                 return RedirectToAction("Index");
             }
             return View();
@@ -51,25 +47,25 @@ namespace BulkyWeb.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-            Category? categoryFromDb = _unitOfWork.Category.Get(u => u.CategoryId == id);
-            //Category? categoryFromDb1 = _db.Categories.FirstOrDefault(u=>u.Id==id);
-            //Category? categoryFromDb2 = _db.Categories.Where(u => u.Id == id).FirstOrDefault();
+            Product? productFromDb = _unitOfWork.Product.Get(u => u.Id == id);
+            //Product? productFromDb1 = _db.Categories.FirstOrDefault(u=>u.Id==id);
+            //Product? productFromDb2 = _db.Categories.Where(u => u.Id == id).FirstOrDefault();
 
-            if (categoryFromDb == null)
+            if (productFromDb == null)
             {
                 return NotFound();
             }
-            return View(categoryFromDb);
+            return View(productFromDb);
         }
         [HttpPost]
-        public IActionResult Edit(Category obj)
+        public IActionResult Edit(Product obj)
         {
 
             if (ModelState.IsValid)
             {
-                _unitOfWork.Category.Update(obj);
+                _unitOfWork.Product.Update(obj);
                 _unitOfWork.Save();
-                TempData["Success"] = "Category Updated Successfully";
+                TempData["Success"] = "Product Updated Successfully";
                 return RedirectToAction("Index");
             }
             return View();
@@ -82,36 +78,36 @@ namespace BulkyWeb.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-            Category? categoryFromDb = _unitOfWork.Category.Get(u => u.CategoryId == id);
-            //Category? categoryFromDb1 = _db.Categories.FirstOrDefault(u => u.Id == id);
-            //Category? categoryFromDb2 = _db.Categories.Where(u => u.Id == id).FirstOrDefault();
+            Product? ProductFromDb = _unitOfWork.Product.Get(u => u.Id == id);
+            //Product? productFromDb1 = _db.Categories.FirstOrDefault(u => u.Id == id);
+            //Product? productFromDb2 = _db.Categories.Where(u => u.Id == id).FirstOrDefault();
 
-            if (categoryFromDb == null)
+            if (ProductFromDb == null)
             {
                 return NotFound();
             }
-            return View(categoryFromDb);
+            return View(ProductFromDb);
         }
         [HttpPost, ActionName("Delete")]
         public IActionResult DeletePost(int? id)
         {
-            Category? obj = _unitOfWork.Category.Get(u => u.CategoryId == id);
+            Product? obj = _unitOfWork.Product.Get(u => u.Id == id);
             if (obj == null)
             {
                 return NotFound();
             }
-            _unitOfWork.Category.Delete(obj);
+            _unitOfWork.Product.Delete(obj);
             _unitOfWork.Save();
-            TempData["Success"] = "Category Deleted Successfully";
+            TempData["Success"] = "Product Deleted Successfully";
             return RedirectToAction("Index");
 
         }
 
     }
 }
-// First add the folder named 'Category' and add view in folder which is by default index.cshtml
+// First add the folder named 'Product' and add view in folder which is by default index.cshtml
 // after adding view add the controller in controllers folder , add controller of same name as of view
-// like for 'category' view add categorycontroller.cs controller, there must be controller name at the last
+// like for 'product' view add productcontroller.cs controller, there must be controller name at the last
 
 // 1 ->
 // In program.cs file which consists of all configuration info we have already configured database
@@ -134,4 +130,4 @@ namespace BulkyWeb.Areas.Admin.Controllers
 // changes
 // by using return to action we are goig back to index action
 // we use ModelState.Isvalid to check if the model is valid and if all the validation mentions
-// in attribute field of element in category model satisfies then it execute the statements
+// in attribute field of element in product model satisfies then it execute the statements

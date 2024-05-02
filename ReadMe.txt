@@ -30,6 +30,7 @@ unitofwork directly
 - now moving on we have created areas for admin and customer which helps to seperate our code
 on Bulkyweb project -> Add -> new scaffolded item -> mvc area
 
+- while updating or adding migration we must keep Default project option to our data access repository 
 - we will move controller of home to customer and category to admin, we will also move views , we have deleted 
 data and model folder since we have already define them above
 
