@@ -8,3 +8,22 @@
 - we have to change the napespaces and import names according to our new folders of class library
 
 - we have to add reference of all class library to our main BulkyWeb 
+
+- we are simply doing what we used to do in controller directly now we do it by using functions like
+save,delete,removerange,get,getall which is userdefine and we are creating interface where we have this 
+functions and we are implementing interfaces in repository and category repository classes 
+
+- we are injecting categoryrepository in controller and we will use categoryrepository rather than dbcontext
+since we have implmented and define all the functionality of db operations in category
+
+- we will register categoryrepository in program.cs
+
+- class name and interface must be public so we can access them in controller
+
+- we have created new repository name unitofwork where we have save method implemented and we are accessing 
+previous category repository by creating instance of category, at the place of category now we will access the 
+all repository using unitofwork repository class,
+advantage of these is we have access to all the repository and its cleaner way of writing
+disadvantage is that we will be implementing all the repository even when we dont need them since we are calling
+unitofwork directly
+
