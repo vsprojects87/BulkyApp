@@ -27,3 +27,10 @@ advantage of these is we have access to all the repository and its cleaner way o
 disadvantage is that we will be implementing all the repository even when we dont need them since we are calling
 unitofwork directly
 
+- now moving on we have created areas for admin and customer which helps to seperate our code
+on Bulkyweb project -> Add -> new scaffolded item -> mvc area
+
+- we will move controller of home to customer and category to admin, we will also move views , we have deleted 
+data and model folder since we have already define them above
+
+- we will need to copy viewimport and viewstart in views of both area since it define imports

@@ -1,63 +1,75 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - BulkyApp</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/BulkyApp.styles.css" asp-append-version="true" />
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>@ViewData["Title"] - BulkyApp</title>
+	<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+	<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+	<link rel="stylesheet" href="~/BulkyApp.styles.css" asp-append-version="true" />
+	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
+
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-primary border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand text-white" asp-area="" asp-controller="Home" asp-action="Index">BulkyApp</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white" asp-area="" asp-controller="Category" asp-action="Index">Category</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            <partial name="_Notifications" />
-            <!-- this is coming from partial view that we created in shared folder of view folder , "_Notification is empty view file
-                that we using as a partial view, we knew that view is partial by writing it in partial name tag
+	<header>
+		<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-primary border-bottom box-shadow mb-3">
+			<div class="container-fluid">
+				<a class="navbar-brand text-white" asp-area="" asp-controller="Home" asp-action="Index">BulkyApp</a>
+				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+						aria-expanded="false" aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+				<div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+					<ul class="navbar-nav flex-grow-1">
+						<li class="nav-item">
+							<a class="nav-link text-white" asp-area="Customer" asp-controller="Home" asp-action="Index">Home</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link text-white" asp-area="Admin" asp-controller="Category" asp-action="Index">Category</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link text-white" asp-area="Customer" asp-controller="Home" asp-action="Privacy">Privacy</a>
+						</li>
+						<li class="nav-item dropdown">
+							<a class="nav-link text-white dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								Dropdown link
+							</a>
+							<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+								<a class="dropdown-item" asp-area="Admin" asp-controller="Category">Action</a>
+								
+							</div>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</nav>
 
-                rather than writing the code again and again we can mention the reusable components by writing it in partial view which
-                is in the shared folder so it is accessible to all the classes and it help us add view in another view just like we did here
-                
-                now we have mention partial view in _layout we can access it for every view without having to mention it in every view
-                
-            " -->
-            @RenderBody()
-        </main>
-    </div>
 
-    <footer class="border-top navbar-dark footer bg-primary text-muted" style="position:fixed;bottom:0;width:100%;height:6vh">
-        <div class="container text-center">
-            &copy; 2023 - BulkyApp - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+	</header>
+	<div class="container">
+		<main role="main" class="pb-3">
+			<partial name="_Notifications" />
+			<!-- this is coming from partial view that we created in shared folder of view folder , "_Notification is empty view file
+				that we using as a partial view, we knew that view is partial by writing it in partial name tag
+
+				rather than writing the code again and again we can mention the reusable components by writing it in partial view which
+				is in the shared folder so it is accessible to all the classes and it help us add view in another view just like we did here
+
+				now we have mention partial view in _layout we can access it for every view without having to mention it in every view
+
+			" -->
+			@RenderBody()
+		</main>
+	</div>
+
+	<footer class="border-top navbar-dark footer bg-primary text-muted" style="position:fixed;bottom:0;width:100%;height:6vh">
+		<div class="container text-center">
+			&copy; 2023 - BulkyApp - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+		</div>
+	</footer>
+	<script src="~/lib/jquery/dist/jquery.min.js"></script>
+	<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="~/js/site.js" asp-append-version="true"></script>
+	@await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

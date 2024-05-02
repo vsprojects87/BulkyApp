@@ -4,15 +4,16 @@ using Microsoft.AspNetCore.Mvc;
 using BulkyApp.DataAccess.Repository.IRepository;
 using Bulky.DataAccess.Repository.IRepository;
 
-namespace BulkyApp.Controllers
+namespace BulkyWeb.Areas.Admin.Controllers
 {
+    [Area("Admin")]
     public class CategoryController : Controller
     {
         // 1
         private readonly IUnitOfWork _unitOfWork;
         public CategoryController(IUnitOfWork unitOfWork)
         {
-            _unitOfWork = unitOfWork; 
+            _unitOfWork = unitOfWork;
         }
         public IActionResult Index()
         {
@@ -21,7 +22,8 @@ namespace BulkyApp.Controllers
             return View(objCategoryList);
         }
 
-        public IActionResult Create() { 
+        public IActionResult Create()
+        {
             return View();
         }
         [HttpPost]
@@ -45,7 +47,7 @@ namespace BulkyApp.Controllers
 
         public IActionResult Edit(int? id)
         {
-            if (id==null || id==0)
+            if (id == null || id == 0)
             {
                 return NotFound();
             }
@@ -62,7 +64,7 @@ namespace BulkyApp.Controllers
         [HttpPost]
         public IActionResult Edit(Category obj)
         {
-       
+
             if (ModelState.IsValid)
             {
                 _unitOfWork.Category.Update(obj);
