@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using BulkyApp.DataAccess.Repository.IRepository;
 using Bulky.DataAccess.Repository.IRepository;
 using Bulky.Models;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Bulky.Models.ViewModels;
 
 namespace BulkyWeb.Areas.Admin.Controllers
 {
@@ -25,85 +27,100 @@ namespace BulkyWeb.Areas.Admin.Controllers
 
         public IActionResult Create()
         {
-            return View();
-        }
-        [HttpPost]
-        public IActionResult Create(Product obj)
-        {
-            //3
-            if (ModelState.IsValid)
-            {
-                _unitOfWork.Product.Add(obj);
-                _unitOfWork.Save();
-                TempData["Success"] = "Product Created Successfully";
-                return RedirectToAction("Index");
-            }
-            return View();
-        }
+            IEnumerable<SelectListItem> CategoryList = _unitOfWork.Category.GetAll()
+                    .Select(u => new SelectListItem
+                    {
+                        Text = u.Name,
+                        Value = u.CategoryId.ToString()
+                    });
+                ProductVM productVM = new ProductVM
+                {
+                    CategoryList = CategoryList,
+                    Product = new Product()
+                };
+                return View(productVM);
 
-        public IActionResult Edit(int? id)
-        {
-            if (id == null || id == 0)
-            {
-                return NotFound();
-            }
-            Product? productFromDb = _unitOfWork.Product.Get(u => u.Id == id);
-            //Product? productFromDb1 = _db.Categories.FirstOrDefault(u=>u.Id==id);
-            //Product? productFromDb2 = _db.Categories.Where(u => u.Id == id).FirstOrDefault();
-
-            if (productFromDb == null)
-            {
-                return NotFound();
-            }
-            return View(productFromDb);
-        }
-        [HttpPost]
-        public IActionResult Edit(Product obj)
-        {
-
-            if (ModelState.IsValid)
-            {
-                _unitOfWork.Product.Update(obj);
-                _unitOfWork.Save();
-                TempData["Success"] = "Product Updated Successfully";
-                return RedirectToAction("Index");
-            }
-            return View();
         }
 
 
-        public IActionResult Delete(int? id)
-        {
-            if (id == null || id == 0)
-            {
-                return NotFound();
-            }
-            Product? ProductFromDb = _unitOfWork.Product.Get(u => u.Id == id);
-            //Product? productFromDb1 = _db.Categories.FirstOrDefault(u => u.Id == id);
-            //Product? productFromDb2 = _db.Categories.Where(u => u.Id == id).FirstOrDefault();
 
-            if (ProductFromDb == null)
-            {
-                return NotFound();
-            }
-            return View(ProductFromDb);
-        }
-        [HttpPost, ActionName("Delete")]
-        public IActionResult DeletePost(int? id)
+    [HttpPost]
+    public IActionResult Create(Product obj)
+    {
+        //3
+        if (ModelState.IsValid)
         {
-            Product? obj = _unitOfWork.Product.Get(u => u.Id == id);
-            if (obj == null)
-            {
-                return NotFound();
-            }
-            _unitOfWork.Product.Delete(obj);
+            _unitOfWork.Product.Add(obj);
             _unitOfWork.Save();
-            TempData["Success"] = "Product Deleted Successfully";
+            TempData["Success"] = "Product Created Successfully";
             return RedirectToAction("Index");
-
         }
+        return View();
+    }
+
+    public IActionResult Edit(int? id)
+    {
+        if (id == null || id == 0)
+        {
+            return NotFound();
+        }
+        Product? productFromDb = _unitOfWork.Product.Get(u => u.Id == id);
+        //Product? productFromDb1 = _db.Categories.FirstOrDefault(u=>u.Id==id);
+        //Product? productFromDb2 = _db.Categories.Where(u => u.Id == id).FirstOrDefault();
+
+        if (productFromDb == null)
+        {
+            return NotFound();
+        }
+        return View(productFromDb);
+    }
+    [HttpPost]
+    public IActionResult Edit(Product obj)
+    {
+
+        if (ModelState.IsValid)
+        {
+            _unitOfWork.Product.Update(obj);
+            _unitOfWork.Save();
+            TempData["Success"] = "Product Updated Successfully";
+            return RedirectToAction("Index");
+        }
+        return View();
+    }
+
+
+    public IActionResult Delete(int? id)
+    {
+        if (id == null || id == 0)
+        {
+            return NotFound();
+        }
+        Product? ProductFromDb = _unitOfWork.Product.Get(u => u.Id == id);
+        //Product? productFromDb1 = _db.Categories.FirstOrDefault(u => u.Id == id);
+        //Product? productFromDb2 = _db.Categories.Where(u => u.Id == id).FirstOrDefault();
+
+        if (ProductFromDb == null)
+        {
+            return NotFound();
+        }
+        return View(ProductFromDb);
+    }
+    [HttpPost, ActionName("Delete")]
+    public IActionResult DeletePost(int? id)
+    {
+        Product? obj = _unitOfWork.Product.Get(u => u.Id == id);
+        if (obj == null)
+        {
+            return NotFound();
+        }
+        _unitOfWork.Product.Delete(obj);
+        _unitOfWork.Save();
+        TempData["Success"] = "Product Deleted Successfully";
+        return RedirectToAction("Index");
 
     }
+
+}
 }
 // First add the folder named 'Product' and add view in folder which is by default index.cshtml
 // after adding view add the controller in controllers folder , add controller of same name as of view
