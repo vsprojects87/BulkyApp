@@ -35,3 +35,8 @@ on Bulkyweb project -> Add -> new scaffolded item -> mvc area
 data and model folder since we have already define them above
 
 - we will need to copy viewimport and viewstart in views of both area since it define imports
+
+- we are creatinf ViewModel for dropdownlist named ProductVM
+
+- to get IEnumerable<SelectListItem> we need to import aspnetcore.mvc.rendering and for that need to 
+install Microsoft.AspNetCore.Mvc.ViewFeatures from nuget packages

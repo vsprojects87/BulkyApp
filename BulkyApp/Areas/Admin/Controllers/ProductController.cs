@@ -28,23 +28,30 @@ namespace BulkyWeb.Areas.Admin.Controllers
         public IActionResult Create()
         {
             IEnumerable<SelectListItem> CategoryList = _unitOfWork.Category.GetAll()
-                    .Select(u => new SelectListItem
+                .Select(u => new SelectListItem
                     {
                         Text = u.Name,
                         Value = u.CategoryId.ToString()
                     });
-                ProductVM productVM = new ProductVM
+                ProductVM productVM = new()
+                // same as ProductVM productVM = new ProductVM
                 {
                     CategoryList = CategoryList,
                     Product = new Product()
                 };
                 return View(productVM);
-
         }
+        // to the ProductVM we are passing values from product model and values for 
+        // ddl from Categorylist which is getting data from categorymodel dbset which will
+        // populate the dropdownlist for create
+
+        // IEnumerable<SelectListItem> is used to represent a list of selectable items
+        // for a dropdown list in a web application, commonly used in ASP.NET MVC or
+        // ASP.NET Core applications.
 
 
 
-    [HttpPost]
+        [HttpPost]
     public IActionResult Create(Product obj)
     {
         //3
