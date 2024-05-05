@@ -6,6 +6,9 @@ using Bulky.DataAccess.Repository.IRepository;
 using Bulky.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Bulky.Models.ViewModels;
+using Microsoft.EntityFrameworkCore;
+using NPOI.SS.Formula.Functions;
+using NuGet.ProjectModel;
 
 namespace BulkyWeb.Areas.Admin.Controllers
 {
@@ -24,7 +27,7 @@ namespace BulkyWeb.Areas.Admin.Controllers
         public IActionResult Index()
         {
             // 2
-            List<Product> objProductList = _unitOfWork.Product.GetAll().ToList();
+            List<Product> objProductList = _unitOfWork.Product.GetAll(includeProperties:"Category").ToList();
             return View(objProductList);
         }
 
@@ -102,15 +105,16 @@ namespace BulkyWeb.Areas.Admin.Controllers
                 if (productVM.Product.Id == 0)
                 {
 					_unitOfWork.Product.Add(productVM.Product);
-                    // if id is not present means we are creating
+					// if id is not present means we are creating
+					TempData["Success"] = "Product Created Successfully";
 				}
 				else
                 {
 					_unitOfWork.Product.Update(productVM.Product);
-                    // if id found means we are updating
+					// if id found means we are updating
+					TempData["Success"] = "Product Updated Successfully";
 				}
 				_unitOfWork.Save();
-                TempData["Success"] = "Product Created Successfully";
                 return RedirectToAction("Index");
             }
             else
@@ -128,24 +132,8 @@ namespace BulkyWeb.Areas.Admin.Controllers
         // upsert- update and insert(create)
 
 
+        [ActionName("Delete")]
         public IActionResult Delete(int? id)
-        {
-            if (id == null || id == 0)
-            {
-                return NotFound();
-            }
-            Product? ProductFromDb = _unitOfWork.Product.Get(u => u.Id == id);
-            //Product? productFromDb1 = _db.Categories.FirstOrDefault(u => u.Id == id);
-            //Product? productFromDb2 = _db.Categories.Where(u => u.Id == id).FirstOrDefault();
-
-            if (ProductFromDb == null)
-            {
-                return NotFound();
-            }
-            return View(ProductFromDb);
-        }
-        [HttpPost, ActionName("Delete")]
-        public IActionResult DeletePost(int? id)
         {
             Product? obj = _unitOfWork.Product.Get(u => u.Id == id);
             if (obj == null)
@@ -155,11 +143,25 @@ namespace BulkyWeb.Areas.Admin.Controllers
             _unitOfWork.Product.Delete(obj);
             _unitOfWork.Save();
             TempData["Success"] = "Product Deleted Successfully";
-            return RedirectToAction("Index");
 
+			// to delete image associated with record in folder
+            // we have fetch all the data above in obj so we can access that ImagUrl as well
+			if (!string.IsNullOrEmpty(obj.ImgUrl))
+			{
+				string wwwRootPath = _webHostEnvironment.WebRootPath;
+				var oldImagePath = Path.Combine(wwwRootPath, obj.ImgUrl.TrimStart('\\'));
+				if (System.IO.File.Exists(oldImagePath))
+				{
+					System.IO.File.Delete(oldImagePath);
+				}
+			}
+
+
+			return RedirectToAction("Index");
         }
 
-    }
+
+	}
 }
 // First add the folder named 'Product' and add view in folder which is by default index.cshtml
 // after adding view add the controller in controllers folder , add controller of same name as of view
