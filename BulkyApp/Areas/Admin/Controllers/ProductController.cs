@@ -14,9 +14,12 @@ namespace BulkyWeb.Areas.Admin.Controllers
     {
         // 1
         private readonly IUnitOfWork _unitOfWork;
-        public ProductController(IUnitOfWork unitOfWork)
+        private readonly IWebHostEnvironment _webHostEnvironment;
+
+        public ProductController(IUnitOfWork unitOfWork, IWebHostEnvironment webHostEnvironment)
         {
             _unitOfWork = unitOfWork;
+            _webHostEnvironment = webHostEnvironment;
         }
         public IActionResult Index()
         {
@@ -25,7 +28,7 @@ namespace BulkyWeb.Areas.Admin.Controllers
             return View(objProductList);
         }
 
-        public IActionResult Create()
+        public IActionResult Upsert(int? id)
         {
             IEnumerable<SelectListItem> CategoryList = _unitOfWork.Category.GetAll()
                 .Select(u => new SelectListItem
@@ -39,7 +42,15 @@ namespace BulkyWeb.Areas.Admin.Controllers
                 CategoryList = CategoryList,
                 Product = new Product()
             };
-            return View(productVM);
+            if (id == null || id == 0)
+            {
+                return View(productVM);
+            }
+            else
+            {
+                productVM.Product = _unitOfWork.Product.Get(u => u.Id == id);
+                return View(productVM);
+            }
         }
         // to the ProductVM we are passing values from product model and values for 
         // ddl from Categorylist which is getting data from categorymodel dbset which will
@@ -52,13 +63,53 @@ namespace BulkyWeb.Areas.Admin.Controllers
 
 
         [HttpPost]
-        public IActionResult Create(ProductVM productVM)
+        public IActionResult Upsert(ProductVM productVM, IFormFile? file)
         {
             //3
             if (ModelState.IsValid)
             {
-                _unitOfWork.Product.Add(productVM.Product);
-                _unitOfWork.Save();
+                string wwwRootPath = _webHostEnvironment.WebRootPath;
+                if (file != null)
+                {
+                    string filename = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+                    string productPath = Path.Combine(wwwRootPath, @"images\product");
+
+                    // on update to delete the existing file from folder to avoid multiple files
+                    // we are trimming start of imgurl since it contains \ and in wwwRootPath we already
+                    // have \ at the end so it will have double \\ and it wont be able to find that location file 
+                    if (!string.IsNullOrEmpty(productVM.Product.ImgUrl))
+                    {
+                        var oldImagePath = Path.Combine(wwwRootPath,productVM.Product.ImgUrl.TrimStart('\\'));
+                        if (System.IO.File.Exists(oldImagePath)) {
+                            System.IO.File.Delete(oldImagePath);
+                        }
+                    }
+
+                    // here we are creating file on productPath location thats why in productPath we have
+                    // address like wwwRootPath and combining with images\product which is path of current environment
+                    // so we are basically storing the image on spefifies location with 'filename'
+                    using (var fileStream = new FileStream(Path.Combine(productPath, filename), FileMode.Create))
+                    {
+                        file.CopyTo(fileStream);
+                    }
+                    productVM.Product.ImgUrl = @"\images\product\" + filename;
+                    // here we are using path like \images\product\ since we are creating
+                    // string name to store in imgurl and not saving file
+                    // in web host we were creating image file but with the imgurl
+                    // we are only redirecting to local image\product folder
+                }
+
+                if (productVM.Product.Id == 0)
+                {
+					_unitOfWork.Product.Add(productVM.Product);
+                    // if id is not present means we are creating
+				}
+				else
+                {
+					_unitOfWork.Product.Update(productVM.Product);
+                    // if id found means we are updating
+				}
+				_unitOfWork.Save();
                 TempData["Success"] = "Product Created Successfully";
                 return RedirectToAction("Index");
             }
@@ -74,36 +125,7 @@ namespace BulkyWeb.Areas.Admin.Controllers
 
             }
         }
-
-        public IActionResult Edit(int? id)
-        {
-            if (id == null || id == 0)
-            {
-                return NotFound();
-            }
-            Product? productFromDb = _unitOfWork.Product.Get(u => u.Id == id);
-            //Product? productFromDb1 = _db.Categories.FirstOrDefault(u=>u.Id==id);
-            //Product? productFromDb2 = _db.Categories.Where(u => u.Id == id).FirstOrDefault();
-
-            if (productFromDb == null)
-            {
-                return NotFound();
-            }
-            return View(productFromDb);
-        }
-        [HttpPost]
-        public IActionResult Edit(Product obj)
-        {
-
-            if (ModelState.IsValid)
-            {
-                _unitOfWork.Product.Update(obj);
-                _unitOfWork.Save();
-                TempData["Success"] = "Product Updated Successfully";
-                return RedirectToAction("Index");
-            }
-            return View();
-        }
+        // upsert- update and insert(create)
 
 
         public IActionResult Delete(int? id)

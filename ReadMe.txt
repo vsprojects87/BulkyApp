@@ -40,3 +40,5 @@ data and model folder since we have already define them above
 
 - to get IEnumerable<SelectListItem> we need to import aspnetcore.mvc.rendering and for that need to 
 install Microsoft.AspNetCore.Mvc.ViewFeatures from nuget packages
+
+
