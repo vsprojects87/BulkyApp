@@ -44,3 +44,8 @@ install Microsoft.AspNetCore.Mvc.ViewFeatures from nuget packages
 
 - in identity, identity have razer pages which is not supported by mvc so we need to add support in program
  files for razor pages
+
+
+ - when we add identity we have created our own ApplicationUser class for user
+
+ - in pages of identity in register.cshtml.cs we need to change IdentityUser createuser to Application user
