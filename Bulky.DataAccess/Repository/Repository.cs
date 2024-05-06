@@ -53,17 +53,17 @@ namespace BulkyApp.DataAccess.Repository
         public IEnumerable<T> GetAll(string? includeProperties=null)
         {
             IQueryable<T> query = dbSet;
-            return query.ToList();
             // 7.0
-            if (!string.IsNullOrEmpty(includeProperties))
+            if(!string.IsNullOrEmpty(includeProperties))
             {
                 foreach(var property in includeProperties.Split(new char[] {','},StringSplitOptions.RemoveEmptyEntries)) {
                     query = query.Include(property);                    
                 }
             }
-        }
+			return query.ToList();
+		}
 
-        public void RemoveRange(IEnumerable<T> entity)
+		public void RemoveRange(IEnumerable<T> entity)
         {
            dbSet.RemoveRange(entity);
         }

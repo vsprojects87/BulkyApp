@@ -140,6 +140,7 @@ namespace BulkyWeb.Areas.Admin.Controllers
             {
                 return NotFound();
             }
+
             _unitOfWork.Product.Delete(obj);
             _unitOfWork.Save();
             TempData["Success"] = "Product Deleted Successfully";
@@ -159,7 +160,6 @@ namespace BulkyWeb.Areas.Admin.Controllers
 
 			return RedirectToAction("Index");
         }
-
 
 	}
 }
