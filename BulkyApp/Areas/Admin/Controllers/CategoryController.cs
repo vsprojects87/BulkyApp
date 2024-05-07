@@ -3,10 +3,14 @@ using BulkyApp.DataAccess.Data;
 using Microsoft.AspNetCore.Mvc;
 using BulkyApp.DataAccess.Repository.IRepository;
 using Bulky.DataAccess.Repository.IRepository;
+using Microsoft.AspNetCore.Authorization;
+using BulkyApp.Utility;
 
 namespace BulkyWeb.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles =SD.Role_Admin)]
+    // we are telling using identity roles that only admin can access all the action methods
     public class CategoryController : Controller
     {
         // 1

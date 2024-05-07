@@ -9,10 +9,15 @@ using Bulky.Models.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using NPOI.SS.Formula.Functions;
 using NuGet.ProjectModel;
+using BulkyApp.Utility;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BulkyWeb.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = SD.Role_Admin)]
+    // we are telling using identity roles that only admin can access all the action methods
+
     public class ProductController : Controller
     {
         // 1
